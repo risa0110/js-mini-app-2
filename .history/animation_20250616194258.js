@@ -1,15 +1,14 @@
 const board = document.querySelector('.game-board');
 const cardsArray = Array.from(document.querySelectorAll('.card'));
 
-// shuffle function simple
-function shuffleCards() {
-  for (let i = cardsArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    board.insertBefore(cardsArray[j], cardsArray[i]);
-  }
+// shuffle tha cards
+for (let i = cardsArray.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [cardsArray[i], cardsArray[j]] = [cardsArray[j], cardsArray[i]];
 }
 
-shuffleCards();
+// put them back in the game
+cardsArray.forEach(card => board.appendChild(card));
 
 const cards = document.querySelectorAll('.card');
 let flippedCards = [];
@@ -48,12 +47,12 @@ cards.forEach(card => {
   });
 });
 
-// animation of side-menu-bar toggle
-document.querySelector(".toggle-button").addEventListener("click", () => {
+//animation of side-menu-bar
+document.querySelector(".toggle-button").addEventListener("click", function(){
   document.querySelector(".recipe-section").classList.toggle("open");
 });
 
-// images sets
+// recipes image sets
 const recipes = {
   "pizza": [
     "./assets/pineapple.png",
@@ -80,12 +79,12 @@ const recipes = {
     "./assets/mapel.png",
   ],
   "ice-cream": [
-    "./assets/milk.jpeg",
+    "./assets/milk.png",
     "./assets/cream.png",
     "./assets/sugar.png",
-    "./assets/cone.jpeg",
-    "./assets/berry.jpeg",
-    "./assets/choco.jpeg",
+    "./assets/vanilla.png",
+    "./assets/strawberry.png",
+    "./assets/chocolate.png"
   ]
 };
 
@@ -95,7 +94,6 @@ document.querySelectorAll('.recipe-option').forEach(option => {
     const selectedRecipe = option.dataset.recipe;
     loadRecipe(selectedRecipe);
     resetGame();
-    shuffleCards();
   });
 });
 
@@ -111,13 +109,17 @@ function loadRecipe(recipeName) {
 
   for (let i = 0; i < cards.length; i++) {
     const ingredientIndex = Math.floor(i / 2);
-    cards[i].querySelector('.card-back').innerHTML = `<img src="${ingredients[ingredientIndex]}" alt="ingredient" />`;
+    const imgSrc = ingredients[ingredientIndex];
+
+    const cardBack = cards[i].querySelector('.card-back');
+    cardBack.innerHTML = `<img src="${imgSrc}" alt="ingredient" />`;
   }
 }
 
 // reset game state when recipe changes
 function resetGame() {
-  cards.forEach(card => {
+  const allCards = document.querySelectorAll('.card');
+  allCards.forEach(card => {
     card.classList.remove('flipped', 'matched');
   });
   flippedCards = [];
