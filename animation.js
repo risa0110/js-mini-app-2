@@ -46,3 +46,9 @@ cards.forEach(card => {
     }
   });
 });
+
+
+//animation of side-menu-bar
+document.querySelector(".toggle-button").addEventListener("click", function(){
+  document.querySelector(".recipe-section").classList.toggle("open");
+})
