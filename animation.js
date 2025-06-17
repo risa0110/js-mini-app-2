@@ -52,3 +52,4 @@ cards.forEach(card => {
 document.querySelector(".toggle-button").addEventListener("click", function(){
   document.querySelector(".recipe-section").classList.toggle("open");
 })
+
