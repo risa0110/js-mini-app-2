@@ -3,6 +3,9 @@ let flippedCards = [];
 const scoreMap = new Map();
 scoreMap.set('score', 0);
 
+// The emoji pairs (default mode)
+const emojiPairs = ['🦀','🦀','🍞','🍞','🍗','🍗','🥩','🥩','🧀','🧀','🥑','🥑'];
+
 // Recipes with image paths
 const recipes = {
   "pizza": [
@@ -39,12 +42,13 @@ const recipes = {
   ]
 };
 
-let currentMode = null;
+let currentMode = 'emoji'; // or recipe name
 
 function updateScoreBoard() {
   document.getElementById('score').textContent = scoreMap.get('score');
 }
-// Shuffle cards
+
+// shuffle
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -53,15 +57,21 @@ function shuffle(array) {
   return array;
 }
 
-function assignCardBacks(values) {
+
+function assignCardBacks(values, isImage = false) {
   const cards = Array.from(document.querySelectorAll('.card'));
   for (let i = 0; i < cards.length; i++) {
     const back = cards[i].querySelector('.card-back');
-    back.innerHTML = `<img src="${values[i]}" alt="ingredient" />`;
+    if (isImage) {
+      back.innerHTML = `<img src="${values[i]}" alt="ingredient" />`;
+    } else {
+      back.textContent = values[i];
+    }
     cards[i].classList.remove('flipped', 'matched');
   }
 }
 
+// Attach event listeners to cards
 function attachCardListeners() {
   const cards = Array.from(document.querySelectorAll('.card'));
   cards.forEach(card => {
@@ -74,8 +84,14 @@ function attachCardListeners() {
 
       if (flippedCards.length === 2) {
         const [card1, card2] = flippedCards;
-        const value1 = card1.querySelector('.card-back img').src;
-        const value2 = card2.querySelector('.card-back img').src;
+        let value1, value2;
+        if (currentMode === 'emoji') {
+          value1 = card1.querySelector('.card-back').textContent.trim();
+          value2 = card2.querySelector('.card-back').textContent.trim();
+        } else {
+          value1 = card1.querySelector('.card-back img').src;
+          value2 = card2.querySelector('.card-back img').src;
+        }
 
         if (value1 === value2) {
           card1.classList.add('matched');
@@ -102,26 +118,40 @@ function attachCardListeners() {
   });
 }
 
+// Reset game state and score
 function resetGame() {
   flippedCards = [];
   scoreMap.set('score', 0);
   updateScoreBoard();
 }
 
-function startRecipeMode(recipeName) {
-  currentMode = recipeName;
-  const ingredients = recipes[recipeName];
-  if (!ingredients) return;
-  const ingredientPairs = shuffle([...ingredients, ...ingredients]);
-  assignCardBacks(ingredientPairs);
+// Start emoji mode
+function startEmojiMode() {
+  currentMode = 'emoji';
+  const shuffled = shuffle([...emojiPairs]);
+  assignCardBacks(shuffled, false);
   resetGame();
   attachCardListeners();
 }
 
+// Start recipe mode
+function startRecipeMode(recipeName) {
+  currentMode = recipeName;
+  const ingredients = recipes[recipeName];
+  if (!ingredients) return;
+  // Each ingredient appears twice
+  const ingredientPairs = shuffle([...ingredients, ...ingredients]);
+  assignCardBacks(ingredientPairs, true);
+  resetGame();
+  attachCardListeners();
+}
+
+// Side menu toggle
 document.querySelector(".toggle-button").addEventListener("click", () => {
   document.querySelector(".recipe-section").classList.toggle("open");
 });
 
+// Recipe selection
 document.querySelectorAll('.recipe-option').forEach(option => {
   option.addEventListener('click', () => {
     const selectedRecipe = option.dataset.recipe;
@@ -129,4 +159,14 @@ document.querySelectorAll('.recipe-option').forEach(option => {
   });
 });
 
+
+const emojiModeBtn = document.getElementById('emoji-mode-btn');
+if (emojiModeBtn) {
+  emojiModeBtn.addEventListener('click', () => {
+    startEmojiMode();
+  });
+}
+
+// Initialize scoreboard and game
 updateScoreBoard();
+startEmojiMode();
