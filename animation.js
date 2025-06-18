@@ -1,5 +1,6 @@
 const board = document.querySelector('.game-board');
 const cardsArray = Array.from(document.querySelectorAll('.card'));
+const matchedCardsSet = new Set();
 
 // shuffle function simple
 function shuffleCards() {
@@ -16,7 +17,7 @@ let flippedCards = [];
 
 cards.forEach(card => {
   card.addEventListener('click', () => {
-    if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+    if (card.classList.contains('flipped')) return;
 
     card.classList.add('flipped');
     flippedCards.push(card);
@@ -27,6 +28,8 @@ cards.forEach(card => {
       const value2 = card2.querySelector('.card-back').innerHTML.trim();
 
       if (value1 === value2) {
+        matchedCardsSet.add(card1);
+        matchedCardsSet.add(card2);
         card1.classList.add('matched');
         card2.classList.add('matched');
       } else {
@@ -38,8 +41,7 @@ cards.forEach(card => {
 
       flippedCards = [];
 
-      const matchedCards = document.querySelectorAll('.matched');
-      if (matchedCards.length === cards.length) {
+      if (matchedCardsSet.size === cards.length) {
         setTimeout(() => {
           alert('Congratulations! You matched all the cards!');
         }, 500);
@@ -49,9 +51,9 @@ cards.forEach(card => {
 });
 
 // animation of side-menu-bar toggle
-document.querySelector(".toggle-button").addEventListener("click", () => {
-  document.querySelector(".recipe-section").classList.toggle("open");
-});
+$(".toggle-button").on("click", function(){
+  $(".recipe-section").toggleClass("open");
+})
 
 // images sets
 const recipes = {
