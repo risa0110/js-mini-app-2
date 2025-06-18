@@ -33,8 +33,8 @@ body {
 
 .card-front,
 .card-back {
-  width: 150;
-  height: 150;
+  width: 100%;
+  height: 100%;
   position: absolute;
   backface-visibility: hidden;
   border-radius: 10px;
@@ -45,6 +45,8 @@ body {
 .card-back img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
   display: block;
 }
 

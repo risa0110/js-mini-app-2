@@ -53,7 +53,7 @@ document.querySelector(".toggle-button").addEventListener("click", () => {
   document.querySelector(".recipe-section").classList.toggle("open");
 });
 
-// images sets
+// image sets
 const recipes = {
   "pizza": [
     "./assets/pineapple.png",
