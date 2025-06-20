@@ -1,18 +1,4 @@
 const board = document.querySelector('.game-board');
-const cardsArray = Array.from(document.querySelectorAll('.card'));
-const matchedCardsSet = new Set();
-
-// shuffle function simple
-function shuffleCards() {
-  for (let i = cardsArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    board.insertBefore(cardsArray[j], cardsArray[i]);
-  }
-}
-
-shuffleCards();
-
-const cards = document.querySelectorAll('.card');
 let flippedCards = [];
 const scoreMap = new Map();
 scoreMap.set('score', 0);
@@ -58,7 +44,7 @@ let currentMode = null;
 function updateScoreBoard() {
   document.getElementById('score').textContent = scoreMap.get('score');
 }
-// Shuffle cards
+
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -81,7 +67,7 @@ function attachCardListeners() {
   cards.forEach(card => {
     card.onclick = null;
     card.addEventListener('click', () => {
-      if (card.classList.contains('flipped')) return;
+      if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
 
       card.classList.add('flipped');
       flippedCards.push(card);
@@ -92,8 +78,6 @@ function attachCardListeners() {
         const value2 = card2.querySelector('.card-back img').src;
 
         if (value1 === value2) {
-          matchedCardsSet.add(card1);
-          matchedCardsSet.add(card2);
           card1.classList.add('matched');
           card2.classList.add('matched');
           scoreMap.set('score', scoreMap.get('score') + 10);
@@ -108,7 +92,7 @@ function attachCardListeners() {
         flippedCards = [];
 
         const matchedCards = document.querySelectorAll('.matched');
-        if (matchedCardsSet.size === cards.length) {
+        if (matchedCards.length === cards.length) {
           setTimeout(() => {
             alert('Congratulations! You matched all the cards!');
           }, 500);

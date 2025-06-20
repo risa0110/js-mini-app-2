@@ -1,0 +1,117 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background-color: #222;
+  color: white;
+}
+
+#score-board {
+  margin-top: 20px;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(4, 120px);
+  gap: 15px;
+  justify-content: center;
+  padding: 40px;
+}
+
+.card {
+  width: 120px;
+  height: 120px;
+  perspective: 1000px;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-front img,
+.card-back img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.card-back {
+  background-color: rgb(104, 100, 100);
+  transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-front {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Recipe section (side menu) */
+.recipe-section {
+  position: fixed;
+  display: flex;
+  align-items: flex-start;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  transform: translateX(70%);
+  transition: transform 0.8s ease;
+}
+.recipe-section.open {
+  transform: translateX(0);
+  transition: transform 0.8s ease;
+}
+
+.recipe-section.open .toggle-button {
+  transform: rotate(180deg);
+  transition: transform 0.5s ease;
+}
+.side-menu {
+  background-color: #fff;
+  color: #222;
+  padding: 2rem;
+  height: 100vh;
+}
+.toggle-button {
+  background-color: #222;
+  border: none;
+  z-index: 10;
+  cursor: pointer;
+  margin: 2rem;
+}
+.toggle-button > img {
+  height: 2rem;
+  aspect-ratio: 1/1;
+}
+
+.recipe-option {
+  background: #eee;
+  color: #222;
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.recipe-option:hover {
