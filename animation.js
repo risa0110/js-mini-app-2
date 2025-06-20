@@ -81,7 +81,7 @@ function attachCardListeners() {
   cards.forEach(card => {
     card.onclick = null;
     card.addEventListener('click', () => {
-      if (card.classList.contains('flipped')) return;
+      if (card.classList.contains('flipped') ||matchedCardsSet.has(card) ) return;
 
       card.classList.add('flipped');
       flippedCards.push(card);
@@ -107,7 +107,6 @@ function attachCardListeners() {
 
         flippedCards = [];
 
-        const matchedCards = document.querySelectorAll('.matched');
         if (matchedCardsSet.size === cards.length) {
           setTimeout(() => {
             alert('Congratulations! You matched all the cards!');
@@ -134,9 +133,9 @@ function startRecipeMode(recipeName) {
   attachCardListeners();
 }
 
-document.querySelector(".toggle-button").addEventListener("click", () => {
-  document.querySelector(".recipe-section").classList.toggle("open");
-});
+$(".toggle-button").on("click", function(){
+  $(".recipe-section").toggleClass("open");
+})
 
 document.querySelectorAll('.recipe-option').forEach(option => {
   option.addEventListener('click', () => {
@@ -145,4 +144,5 @@ document.querySelectorAll('.recipe-option').forEach(option => {
   });
 });
 
+startRecipeMode("french-toast");
 updateScoreBoard();
